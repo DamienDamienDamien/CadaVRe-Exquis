@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "com.jimmycushnie.noisynodes": {
+      "version": "file:Noisy-Nodes-master",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.shadergraph": "7.1.8"
+      }
+    },
     "com.meta.xr.mrutilitykit": {
       "version": "74.0.1",
       "depth": 1,
