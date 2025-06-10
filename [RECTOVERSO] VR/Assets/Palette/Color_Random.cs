@@ -18,7 +18,7 @@ public class Color_Random : MonoBehaviour
         if (Distance<minDis&& !isClose)
         {
             isClose = true; // Set the flag to true if the target is close
-            target.transform.parent.GetComponent<Pencil02>().ChangeColor(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f))); ;
+            target.transform.parent.GetComponent<PencilCylinder>().ChangeColor(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f))); ;
         }
         else
         {

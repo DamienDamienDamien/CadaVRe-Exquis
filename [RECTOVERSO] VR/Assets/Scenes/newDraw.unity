@@ -13580,7 +13580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1094516667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23332,7 +23332,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1867159901
 Transform:
   m_ObjectHideFlags: 0
@@ -27533,7 +27533,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2930627656950487535}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ceffca9417354549babc816ef430758, type: 3}
   m_Name: 
@@ -27554,7 +27554,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2930627656950487535}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acc770fa36e0bb94ba925edae8fc0fff, type: 3}
   m_Name: 
@@ -27563,7 +27563,7 @@ MonoBehaviour:
   penTip: {fileID: 5874603780475503794}
   tipMaterial: {fileID: 2100000, guid: 4781397f0e77d1841a1dfc63543d157c, type: 2}
   penWidth: 0.003
-  coloredPaint: {fileID: 2100000, guid: 14f3aab4f663873408270fd72d0d5176, type: 2}
+  coloredPaint: {fileID: 2100000, guid: 24f1d9f49b9dfb04c8416f884deda515, type: 2}
   lineMinSize: 0.01
   baseBrushSize: 0.001
   currentColor: {r: 0, g: 0, b: 0, a: 0}
