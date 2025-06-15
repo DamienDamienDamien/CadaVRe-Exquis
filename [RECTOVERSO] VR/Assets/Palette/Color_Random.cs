@@ -8,6 +8,7 @@ public class Color_Random : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Debug.LogError("Script attaché à : " + gameObject.name);
         target = GameObject.Find("Tip"); // Find the target object in the scene
     }
 

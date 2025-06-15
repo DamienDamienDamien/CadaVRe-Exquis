@@ -11,6 +11,8 @@ TagManager:
   - Cible
   - Cible2
   - gameManager
+  - Hand
+  - Pen
   layers:
   - Default
   - TransparentFX
