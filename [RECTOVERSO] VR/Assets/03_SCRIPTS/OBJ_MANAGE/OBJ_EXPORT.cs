@@ -23,7 +23,7 @@ public class OBJ_EXPORT : MonoBehaviour
         {
             Directory.CreateDirectory(fullFolderPath);
         }
-
+        Debug.Log($"Full folder path: {fullFolderPath}");
         string fileBaseName = Path.GetFileNameWithoutExtension(fileName);
         string fileExtension = Path.GetExtension(fileName);
         string filePath = Path.Combine(fullFolderPath, $"{fileBaseName}_01{fileExtension}");

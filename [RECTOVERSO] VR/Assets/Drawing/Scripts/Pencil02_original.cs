@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework.Internal;
@@ -6,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Pencil02 : MonoBehaviour
+public class Pencil02_original : MonoBehaviour
 {
     [Header("SCRIPTS")]
     public SYSTEM_DRAWZONE drawZoneScript;
@@ -37,18 +36,12 @@ public class Pencil02 : MonoBehaviour
     [Range(0.001f, 1f)]
     public float baseBrushSize = 0.001f;
     public Color currentColor;
-    public int cylinderResolution = 6; // Number of segments in the cylinder
     private Vector3 LastFramePos;
     private Vector3 lastFramePosUpdated;
-
-
-    private Vector3 currentVectorCylinder;
-
     public float minPressure = 0.01f; // Minimum pressure to start drawing
     List<Color> vertexColors = new List<Color>();
     List<Color> vertexColorsOut = new List<Color>();
     List<Color> vertexColorsTarget = new List<Color>();
-
 
     private void Start()
     {
@@ -86,7 +79,7 @@ public class Pencil02 : MonoBehaviour
             penWidth = Remap(brushPression, 0.001f, 1f, baseBrushSize, baseBrushSize+0.02f);
 
 
-            if(drawZoneScript.canDraw == true){Draw(mesh, meshFilter, vertices, triangles, vertexColors,cylinderResolution);}
+            if(drawZoneScript.canDraw == true){Draw(mesh, meshFilter, vertices, triangles, vertexColors);}
             else{return;}//Draw(outMesh, outMeshFilter, verticesOut, trianglesOut, vertexColorsOut);} je ne sais pas pourquoi ça ne réussit pas à créer dans le mesh outMeshFilter
 
             
@@ -106,108 +99,88 @@ public class Pencil02 : MonoBehaviour
             Color random  = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
             ChangeColor(random);
         }
-
-        if (OVRInput.GetDown(OVRInput.Button.Three))
-        {
-            ResetDrawing();
-            
-        }
-
-        if (drawZoneScript.canDraw == true){
+        if(drawZoneScript.canDraw == true){
         lastFramePosUpdated = penTip.position;}
-        
+
     }
 
-    private void Draw(Mesh targetMesh, MeshFilter targetMeshFilter, List<Vector3> verticesTarget, List<int> trianglesTarget, List<Color> vertexColorsTarget, int cylinderRes = 6)
+    private void Draw(Mesh targetMesh, MeshFilter targetMeshFilter, List<Vector3> verticesTarget, List<int> trianglesTarget, List<Color> vertexColorsTarget)
     {       
-        
+        LastFramePos = penTip.position;
         Vector3 currentPosition = penTip.position;
             
         Vector3 direction = (currentPosition- LastFramePos).normalized;
-
-        //Vector3 perpendicular = transform.right * penWidth;
-        
-
-        
-        //Vector3 perpendicular = transform.up - Vector3.Dot(transform.up,direction)* direction;
-
-        if (verticesTarget.Count == 0|| !isDrawing)
+           
+        Vector3 perpendicular = transform.right * penWidth;
+            if (verticesTarget.Count < 2 || !isDrawing)
             {
+                verticesTarget.Add(lastFramePosUpdated - perpendicular);
+                verticesTarget.Add(lastFramePosUpdated + perpendicular);
+                verticesTarget.Add(currentPosition - perpendicular);
+                verticesTarget.Add(currentPosition + perpendicular);
 
-            currentVectorCylinder = Vector3.Cross(direction, Vector3.up);
+                int baseIndex = Mathf.Max((verticesTarget.Count - 4), 0);
+                trianglesTarget.Add(baseIndex);
+                trianglesTarget.Add(baseIndex + 1);
+                trianglesTarget.Add(baseIndex + 2);
 
-            if (currentVectorCylinder.magnitude < 0.001f)
-            {
-                currentVectorCylinder = Vector3.Cross(direction, Vector3.right);
-            }
-            
-            currentVectorCylinder = currentVectorCylinder.normalized;
-       
-            for (int i = 0; i < cylinderRes; i++)
-            {
-                Vector3 vectorCylinder = currentVectorCylinder* penWidth;
-                float angle = i * (360f / cylinderRes);
-                Quaternion rotation = Quaternion.AngleAxis(angle, direction);
-                Vector3 rotatedVector = rotation * vectorCylinder;
-                verticesTarget.Add(currentPosition + rotatedVector);
+                trianglesTarget.Add(baseIndex + 1);
+                trianglesTarget.Add(baseIndex + 3);
+                trianglesTarget.Add(baseIndex + 2);
+                isDrawing = true;
+
+               // Apply vertices and triangles to the mesh
+               for(int i = 0; i < 4; i++)
+                {
                 vertexColorsTarget.Add(currentColor);
+                 }
 
-            }
-            isDrawing = true;
-            }
-
-        else
-        {
+            targetMesh.SetVertices(verticesTarget);
+            targetMesh.SetTriangles(triangles, 0);
             
+            
+            
+            targetMeshFilter.mesh = targetMesh;
+            targetMesh.colors = vertexColorsTarget.ToArray();
 
-            for (int i = 0; i < cylinderRes; i++)
+            // Debug.Log(meshFilter.mesh.colors.Length.ToString() + "_" + vertexColors.Count.ToString());
+            }
+
+            else {
+
+                // Define vertices for the segment
+                
+                verticesTarget.Add(currentPosition - perpendicular);
+                verticesTarget.Add(currentPosition + perpendicular);
+
+            for (int i = 0; i < 2; i++)
             {
-                Vector3 vectorCylinder = currentVectorCylinder* penWidth;
-                float angle = i * (360f / cylinderRes);
-                Quaternion rotation = Quaternion.AngleAxis(angle, direction);
-                Vector3 rotatedVector = rotation * vectorCylinder;
-                verticesTarget.Add(currentPosition + rotatedVector);
                 vertexColorsTarget.Add(currentColor);
             }
+            // Define triangles for the segment
+            int baseIndex = verticesTarget.Count - 4; // Les 4 derniers vertices ajout�s
+            trianglesTarget.Add(baseIndex);
+            trianglesTarget.Add(baseIndex + 1);
+            trianglesTarget.Add(baseIndex + 2);
 
-            int prevBase = verticesTarget.Count - 2 * cylinderRes;
-            int currBase = verticesTarget.Count - cylinderRes;
-            for (int i = 0; i < cylinderRes; i++)
-            {
-                int next = (i + 1) % cylinderRes;
-                // Premier triangle
-                trianglesTarget.Add(prevBase + i);
-                trianglesTarget.Add(currBase + next);
-                trianglesTarget.Add(currBase + i);
-                // Deuxième triangle
-                trianglesTarget.Add(prevBase + i);
+            trianglesTarget.Add(baseIndex + 1);
+            trianglesTarget.Add(baseIndex + 3);
+            trianglesTarget.Add(baseIndex + 2);
+            // Apply vertices and triangles to the mesh
+            targetMesh.SetVertices(vertices);
+            targetMesh.SetTriangles(triangles, 0);
+            targetMesh.RecalculateNormals();
 
-                trianglesTarget.Add(prevBase + next);
-                trianglesTarget.Add(currBase + next);
+                
+                    
+                
             }
-
-        }
-        targetMesh.SetVertices(verticesTarget);
-        targetMesh.SetTriangles(trianglesTarget, 0);
-        targetMesh.RecalculateNormals();
-        targetMesh.colors = vertexColorsTarget.ToArray();
+            targetMesh.colors = vertexColorsTarget.ToArray();
         targetMeshFilter.mesh = targetMesh;
+        
 
 
         targetMeshFilter.mesh.RecalculateBounds();
-        currentVectorCylinder = (currentVectorCylinder - direction * Vector3.Dot(currentVectorCylinder, direction)).normalized;
-        LastFramePos = currentPosition;
-
-    }
-
-    private void ResetDrawing()
-    {
-        meshFilter.mesh.Clear();
-        mesh = new Mesh();
-        
-        vertices.Clear();
-        triangles.Clear();
-        vertexColors.Clear();
         
     }
 

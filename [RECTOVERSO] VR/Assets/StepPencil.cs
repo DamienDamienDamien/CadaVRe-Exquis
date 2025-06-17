@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class RandomShaderChanger : MonoBehaviour
+public class StepPencil : MonoBehaviour
 {
-    public Renderer targetRenderer;
+    private Renderer targetRenderer;
     public string propertyName1 = "_Intensity";
     public string propertyName2 = "_Scale";
 
@@ -12,6 +12,10 @@ public class RandomShaderChanger : MonoBehaviour
 
     private float timer = 0f;
 
+    void Start()
+    {
+        targetRenderer = GetComponent<Renderer>();
+    }
     void Update()
     {
         if (targetRenderer == null) return;

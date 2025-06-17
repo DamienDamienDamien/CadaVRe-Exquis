@@ -1,10 +1,11 @@
-using UnityEngine;
 using Oculus.Platform;
 using Oculus.Platform.Models;
-using UnityEngine.UI;
-using System.Collections;
 using System;
+using System.Collections;
 using TMPro;
+using UnityEngine;
+using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
 
 public class SYSTEM_GAME : MonoBehaviour
 {
@@ -93,7 +94,7 @@ public class SYSTEM_GAME : MonoBehaviour
     {
         if (currentDamaged != null)
         {
-            if (OVRInput.GetDown(OVRInput.RawButton.Y) || OVRInput.GetDown(OVRInput.RawButton.B) || Input.GetKeyDown(KeyCode.F))
+            if (OVRInput.GetDown(OVRInput.RawButton.B) || Input.GetKeyDown(KeyCode.F))
             {
                 currentDamagedScript.FinishDraw();
                 currentDamaged = null;
@@ -227,6 +228,7 @@ public class SYSTEM_GAME : MonoBehaviour
             Vector3 spawnPosition = center.position + new Vector3(randomPoint.x, 0, randomPoint.y);
             GameObject crowd = Instantiate(crowdPrefab, repairPosition, Quaternion.identity);
             GameObject character = Instantiate(characterPrefab, repairPosition, Quaternion.identity);
+            character.GetComponent<SYSTEM_CHARACTER>().paintMaterial = Pencil.GetComponent<Pencil02>().coloredPaint;
             character.transform.SetParent(crowd.transform);
 
             tempScript = character.GetComponent<SYSTEM_CHARACTER>();
@@ -240,6 +242,7 @@ public class SYSTEM_GAME : MonoBehaviour
     {
         pencilScript.CreateBaseMesh();
         currentDamaged = Instantiate(characterPrefab, repairPosition, Quaternion.identity);
+        currentDamaged.GetComponent<SYSTEM_CHARACTER>().paintMaterial = Pencil.GetComponent<Pencil02>().coloredPaint;
         currentDamagedScript = currentDamaged.GetComponent<SYSTEM_CHARACTER>();
         currentDamagedScript.CreateDamaged();
         currentSpawnScript = currentDamaged.GetComponent<SpawnUncompletedCharacter>();

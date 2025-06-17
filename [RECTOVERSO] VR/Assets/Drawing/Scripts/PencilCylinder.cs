@@ -83,8 +83,8 @@ public class PencilCylinder : MonoBehaviour
             //else{return;}//Draw(outMesh, outMeshFilter, verticesOut, trianglesOut, vertexColorsOut);} je ne sais pas pourquoi ça ne réussit pas à créer dans le mesh outMeshFilter
 
             Draw(mesh, meshFilter, vertices, triangles, vertexColors,10);
-            Debug.Log("Vertex Number : "+mesh.vertexCount);
-            print(mesh.GetTriangles(0).Length.ToString() + " triangles in mesh");
+            //Debug.Log("Vertex Number : "+mesh.vertexCount);
+            //print(mesh.GetTriangles(0).Length.ToString() + " triangles in mesh");
 
         }
         else if (isDrawing)
@@ -131,7 +131,7 @@ public class PencilCylinder : MonoBehaviour
 
 
             // Debug.Log(meshFilter.mesh.colors.Length.ToString() + "_" + vertexColors.Count.ToString());
-        }
+            }
 
             else {
 
