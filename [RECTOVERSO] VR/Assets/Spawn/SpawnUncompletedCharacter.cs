@@ -70,7 +70,7 @@ public class SpawnUncompletedCharacter : MonoBehaviour
 
             if (direction != Vector3.zero)
             {
-                Quaternion rotationtarget = Quaternion.LookRotation(direction);
+                Quaternion rotationtarget = Quaternion.LookRotation(-direction);
                 transform.rotation = Quaternion.Slerp(transform.rotation, rotationtarget, Time.deltaTime *vitesse);
             }
         if (distance <= distanceArret){

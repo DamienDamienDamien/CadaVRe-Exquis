@@ -240,7 +240,7 @@ public class SYSTEM_GAME : MonoBehaviour
 
     public void CreateDamaged()
     {
-        pencilScript.CreateBaseMesh();
+        pencilScript.CreateBaseMesh(); // Initie le dessin de la nouvelle partie
         currentDamaged = Instantiate(characterPrefab, repairPosition, Quaternion.identity);
         currentDamaged.GetComponent<SYSTEM_CHARACTER>().paintMaterial = Pencil.GetComponent<Pencil02>().coloredPaint;
         currentDamagedScript = currentDamaged.GetComponent<SYSTEM_CHARACTER>();
